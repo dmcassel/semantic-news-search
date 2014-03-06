@@ -1,0 +1,5 @@
+deploy/local.properties
+# Keeping these out of git because the app lives in a public GitHub repo. Don't 
+# want server names and passwords out there. 
+deploy/dev.properties
+deploy/prod.properties
