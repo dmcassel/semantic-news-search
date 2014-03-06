@@ -1,5 +1,4 @@
 /* Downloaded from here: http://matthewjamestaylor.com/blog/perfect-3-column.htm
- * (unmodified as yet)
  */
 body {
 	margin:0;
@@ -8,16 +7,23 @@ body {
 	width:100%;
 	background:#fff;
 	min-width:600px;		/* Minimum width of layout - remove line if not required */
-					/* The min-width property does not work in old versions of Internet Explorer */
-	font-size:90%;
+  font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
+  font-size:90%;
 }
 a {
 	color:#369;
 }
 a:hover {
-	color:#fff;
-	background:#369;
-	text-decoration:none;
+  color:#fff;
+  background:#369;
+  text-decoration:none;
+}
+/*hover for the text links*/
+#results a:hover ul, #facets ul a:hover {
+  padding: 0 4px;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Lucida Bright", Georgia, serif; 
 }
 h1, h2, h3 {
 	margin:.8em 0 .2em 0;
@@ -107,6 +113,7 @@ img {
 	float:left;
 	width:100%;			/* width of whole page */
 	overflow:hidden;		/* This chops off any overhanging divs */
+  margin-top: 10px;
 }
 /* common column settings */
 .colright,
@@ -132,16 +139,17 @@ img {
 	overflow:hidden;
 }
 /* 3 Column settings */
+
 .threecol {
 	background:#eee;		/* right column background colour */
 }
 .threecol .colmid {
-	right:25%;			/* width of the right column */
+	right:20%;			/* width of the right column */
 	background:#fff;		/* center column background colour */
 }
 .threecol .colleft {
-	right:50%;			/* width of the middle column */
-	background:#f4f4f4;	/* left column background colour */
+  right:50%;      /* width of the middle column */
+  background:#ededed; /* left column background colour */
 }
 .threecol .col1 {
 	width:46%;			/* width of center column content (column width minus padding on either side) */
@@ -158,10 +166,11 @@ img {
 }
 /* Footer styles */
 #footer {
-	clear:both;
+	border-top: 1px solid #ccc;
+  clear:both;
 	float:left;
-	width:100%;
-	border-top:1px solid #000;
+	text-align: center;
+  width:100%;
 }
 #footer p {
 	padding:10px;
