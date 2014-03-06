@@ -128,14 +128,77 @@
         <field>
           <field-name>category</field-name>
           <field-path>
-            <path>sem:triple[sem:predicate eq 'http://s.opencalais.com/1/pred/cate
-        goryName']/sem:object</path>
+            <path>sem:triple[sem:predicate eq 'http://s.opencalais.com/1/pred/categoryName']/sem:object</path>
             <weight>1.0</weight>
           </field-path>
           <word-lexicons/>
           <included-elements/>
           <excluded-elements/>
           <tokenizer-overrides/>
+          <stemmed-searches>basic</stemmed-searches>
+          <fast-phrase-searches>true</fast-phrase-searches>
+          <fast-case-sensitive-searches>true</fast-case-sensitive-searches>
+          <fast-diacritic-sensitive-searches>true</fast-diacritic-sensitive-searches>
+        </field>
+        <field>
+          <field-name>orgtype</field-name>
+          <field-path>
+            <path>sem:triple[sem:predicate eq 'http://s.opencalais.com/1/pred/organizationtype']/sem:object</path>
+            <weight>1.0</weight>
+          </field-path>
+          <word-lexicons/>
+          <included-elements/>
+          <excluded-elements/>
+          <tokenizer-overrides/>
+          <stemmed-searches>basic</stemmed-searches>
+          <fast-phrase-searches>true</fast-phrase-searches>
+          <fast-case-sensitive-searches>true</fast-case-sensitive-searches>
+          <fast-diacritic-sensitive-searches>true</fast-diacritic-sensitive-searches>
+        </field>
+        <field>
+          <field-name>producttype</field-name>
+          <field-path>
+            <path>sem:triple[sem:predicate eq 'http://s.opencalais.com/1/pred/producttype']/sem:object</path>
+            <weight>1.0</weight>
+          </field-path>
+          <word-lexicons/>
+          <included-elements/>
+          <excluded-elements/>
+          <tokenizer-overrides/>
+          <stemmed-searches>basic</stemmed-searches>
+          <fast-phrase-searches>true</fast-phrase-searches>
+          <fast-case-sensitive-searches>true</fast-case-sensitive-searches>
+          <fast-diacritic-sensitive-searches>true</fast-diacritic-sensitive-searches>
+        </field>
+        <field>
+          <field-name>persontype</field-name>
+          <field-path>
+            <path>sem:triple[sem:predicate eq 'http://s.opencalais.com/1/pred/persontype']/sem:object</path>
+            <weight>1.0</weight>
+          </field-path>
+          <word-lexicons/>
+          <included-elements/>
+          <excluded-elements/>
+          <tokenizer-overrides/>
+          <stemmed-searches>basic</stemmed-searches>
+          <fast-phrase-searches>true</fast-phrase-searches>
+          <fast-case-sensitive-searches>true</fast-case-sensitive-searches>
+          <fast-diacritic-sensitive-searches>true</fast-diacritic-sensitive-searches>
+        </field>
+        <field>
+          <field-name>politicaleventtype</field-name>
+          <field-path>
+            <path>sem:triple[sem:predicate eq 'http://s.opencalais.com/1/pred/politicaleventtype']/sem:object</path>
+            <weight>1.0</weight>
+          </field-path>
+          <word-lexicons/>
+          <included-elements/>
+          <excluded-elements/>
+          <tokenizer-overrides/>
+          <stemmed-searches>basic</stemmed-searches>
+          <fast-phrase-searches>true</fast-phrase-searches>
+          <fast-case-sensitive-searches>true</fast-case-sensitive-searches>
+          <fast-diacritic-sensitive-searches>true</fast-diacritic-sensitive-searches>
         </field>
       </fields>
       <range-element-indexes>
@@ -221,6 +284,10 @@
           <namespace-uri>http://marklogic.com/ns/sample</namespace-uri>
         </path-namespace>
 -->
+        <path-namespace>
+          <prefix>sem</prefix>
+          <namespace-uri>http://marklogic.com/semantics</namespace-uri>
+        </path-namespace>
       </path-namespaces>
 
       <range-path-indexes>
