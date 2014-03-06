@@ -30,6 +30,7 @@ p {
 img {
 	margin:10px 0 5px;
 }
+
 #ads img {
 	display:block;
 	padding-top:10px;
@@ -115,6 +116,12 @@ img {
 	width:100%;			/* width of page */
 	position:relative;
 }
+
+.colright,
+.colleft {
+	padding-top:20px;
+}
+
 .col1,
 .col2,
 .col3 {

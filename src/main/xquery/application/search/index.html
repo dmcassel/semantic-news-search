@@ -1,87 +1,139 @@
 <!DOCTYPE html>
 <html xmlns:mt="http://marklogic.com/sem-app/templates" xmlns:replace="http://marklogic.com/sem-app/replace-att">
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Semantic News Search: Results</title>
-  <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-  <link id="stylesheet" type="text/css" rel="stylesheet" href="/css/style.css"/>
-</head>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Semantic News Search: Results</title>
+		<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+		<link id="stylesheet" type="text/css" rel="stylesheet" href="/css/style.css"/>
+	</head>
 
-<body>
-  <div id="header">
-    <h1>Semantic News Search</h1>
+	<body>
 
-    <div id="searchbar">
-      <form id="search" action="/search/" method="get">
-        <input type="text" placeholder="SEARCH" name="q" mt:value="" id="searchbox"/>
-        <input type="submit" value="Search"/>
-      </form>
-    </div>
+		<div class="header-wrapper">
 
-  </div>
+			<div class="left">
 
-  <div class="colmask threecol">
-    <div class="colmid">
-      <div class="colleft">
-        <div class="col1">
+				<a href="/search"><img src="/images/marklogic.png" alt="MarkLogic"/></a>
 
-          <div mt:page-region="results" id="resultsPane">
-            <div>Query used:</div>
-            <tt><mt:query-used/></tt>
-            <div id="results">
-              <ul>
-                <li mt:repeating="result">
-                  <div>
-                    <a replace:href="{mt:articleLink}">
-                      <span class="title" mt:field="title"></span>
-                    </a>
-                  </div>
-                  <div class="excerpt" mt:field="excerpt"></div>
-                  <div class="categories">
-                    <span>Categories: </span>
-                    <span mt:repeating="category" mt:selected-class="category_on">
-                      <a replace:href="/search/?q={mt:q}" mt:field="name"></a>
-                    </span>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <mt:pagination/>
-            <p><a href="#" onclick="window.location = '/search/results.xqy?format=xml&amp;q='+$('#searchbox').val();">View XML results</a></p>
-          </div>
+			</div>
 
-        </div>
-        <div class="col2">
+			<div class="center">
 
-          <div id="facets">
-            <div mt:repeating="facet">
-              <div class="title" mt:field="facet-display"></div>
-              <ul>
-                <li mt:repeating="facet-value" replace:data-q="{mt:q}" mt:selected-class="on">
-                  <a replace:href="/search/?q={mt:q}">
-                    <span class="name" mt:field="name"></span> 
-                  </a>
-                  (<span class="count" mt:field="count"></span>)
-                </li>
-              </ul>
-            </div>
-          </div>
+				Semantic News Application
 
-        </div>
-        <div class="col3">
+			</div>
 
-          <div mt:page-region="infobox" id="infobox">
-            <mt:infobox/>
-          </div>
+			<div class="right">
 
-        </div>
-      </div>
-    </div>
-  </div>
+				<div class="welcome">
+					<!--?if fn:not(xdmp:get-current-user() = "admin") ?>
+					<span class="note">Please Login</span>
+					<?else?>
+					<span class="note">Welcome, <a href="#" title="Welcome, {xdmp:get-current-user()}">{xdmp:get-current-user()}</a></span-->
+					<!--<a class="btn ui-state-default ui-corner-all" href="#">
+					<span class="ui-icon ui-icon-wrench"></span>
+					Settings
+					</a>
+					<a class="btn ui-state-default ui-corner-all" href="/my-account.html">
+					<span class="ui-icon ui-icon-person"></span>
+					My account
+					</a>>
 
-  <div id="footer">
-    <p>This sample application illustrates MarkLogic 7's new semantic search capabilities.</p>
-  </div>
+					<a class="btn ui-state-default ui-corner-all" href="/logout.html"> <span class="ui-icon ui-icon-power"></span> Logout </a>
+					<?endif?-->
+				</div>
 
-</body>
+				<?if fn:not(xdmp:get-current-user() = "anonymous-user")?>
+				<?template name="navigation"?>
+				<div id="searchbar">
+					<form id="search" action="/search/" method="get">
+						<input type="text" placeholder="SEARCH" name="q" mt:value="" id="searchbox"/>
+						<input type="submit" value="Search"/>
+					</form>
+
+						<!-- Let's enable this when we're ready to make it work -->
+						<!--div id="sortbar">
+						<div class="fieldname">Currently Sorting By</div>
+						<div class="select-style">
+						<select id="sortbox" mt:sortbox="yes">
+						<option value="relevance"     mt:selected="selected">Relevance</option>
+						<option value="date-forward"  mt:selected="selected">Date, forward</option>
+						<option value="date-backward" mt:selected="selected">Date, backward</option>
+						</select>
+						</div>
+						</div>
+						<?endif?-->
+				</div>
+			</div>
+			
+			</div>
+
+			<div class="colmask threecol">
+				<div class="colmid">
+					<div class="colleft">
+						<div class="col1">
+
+							<div mt:page-region="results" id="resultsPane">
+								<!--div>Query used:</div-->
+								<!--tt><mt:query-used/></tt-->
+								<div id="results">
+									<ul>
+										<li mt:repeating="result">
+											<div>
+												<a replace:href="{mt:articleLink}"> <span class="title" mt:field="title"></span> </a>
+											</div>
+											<div class="excerpt" mt:field="excerpt"></div>
+											
+											<div class="categories">
+												<span>Categories: </span>
+												<span mt:repeating="category" mt:selected-class="category_on"> <a replace:href="/search/?q={mt:q}" mt:field="name"></a> </span>
+											</div>
+									
+											<!--div class="tags">
+												<span>Tags: </span>
+												<span mt:repeating="tag" mt:selected-class="tags_on"> <a replace:href="/search/?q={mt:q}" mt:field="name"></a> </span>
+											</div-->
+											
+										</li>
+									</ul>
+								</div>
+								<p>
+									<a href="#" onclick="window.location = '/search/results.xqy?format=xml&amp;q='+$('#searchbox').val();">View XML results</a>
+								</p>
+							</div>
+
+						</div>
+						<div class="col2">
+
+							<div id="facets">
+								<div mt:repeating="facet">
+									<div class="title" mt:field="facet-display"></div>
+									<ul>
+										<li mt:repeating="facet-value" replace:data-q="{mt:q}" mt:selected-class="on">
+											<a replace:href="/search/?q={mt:q}"> <span class="name" mt:field="name"></span> </a>
+											(<span class="count" mt:field="count"></span>)
+										</li>
+									</ul>
+								</div>
+							</div>
+
+						</div>
+						<div class="col3">
+
+							<div mt:page-region="infobox" id="infobox">
+								<mt:infobox/>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="footer">
+				<p>
+					This sample application illustrates MarkLogic 7's new semantic search capabilities.
+				</p>
+			</div>
+
+	</body>
 </html>

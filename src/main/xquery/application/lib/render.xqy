@@ -17,14 +17,28 @@ declare private variable $template-path :=
     concat($root-without-slash, $path-without-file, '/index.html');
 
 (: Load the template file as XML :)
-declare private variable $template := xdmp:document-get($template-path,
+
+(: declare private variable $template := xdmp:document-get($template-path,
                                                         <options xmlns="xdmp:document-get">
                                                           <format>xml</format>
-                                                        </options>);
+                                                        </options>); :)
+                                                        
+declare private variable $template := xdmp:eval(
+  concat("fn:doc('",$template-path,"')"), (),
+  <options xmlns="xdmp:eval">
+    <database>{xdmp:modules-database()}</database>
+  </options>
+  );                                        
 
 (: Render the whole page/template :)
 declare function render:full-page() {
-  xdmp:xslt-invoke("render.xsl", $template)
+
+  let $template-log := xdmp:log(concat("Template log: ",concat("fn:doc('",$template-path,"')")))
+  let $template-log := xdmp:log(concat("Template: ",$template))
+  
+  return
+
+    xdmp:xslt-invoke("render.xsl", $template)
 };
 
 (: Render just part of the page :)

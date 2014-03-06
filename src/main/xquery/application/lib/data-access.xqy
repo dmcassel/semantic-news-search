@@ -16,11 +16,19 @@ declare default function namespace "http://www.w3.org/2005/xpath-functions";
 declare variable $q := xdmp:get-request-field("q","");
 
 (: The desired page number :)
-declare variable $p := xs:integer(xdmp:get-request-field("p","1"));
+declare private variable $p := xs:integer(xdmp:get-request-field("p","1"));
 
 (: Where all the facets are configured :)
 declare variable $facet-configs :=
-  xdmp:document-get(xdmp:modules-root()||"config/facets.xml")/facets/facet;
+  (: xdmp:document-get(xdmp:modules-root()||"config/facets.xml")/facets/facet; :)
+  
+  xdmp:eval(
+  concat("fn:doc('",xdmp:modules-root(),"config/facets.xml')"), (),
+  <options xmlns="xdmp:eval">
+    <database>{xdmp:modules-database()}</database>
+  </options>
+  )/facets/facet;                                 
+  
 
 (: Options node for the Search API :)
 declare variable $options :=
@@ -89,9 +97,31 @@ declare private function data:start-index($page-length as xs:integer,
 };
 
 declare function data:highlight($node) {
+(: let $node := fn:doc("content/news/world-asia-china-23081653.xml")//*:title return :)
   cts:highlight($node, data:matchesAnyQuery($ctsQuery), <strong>{$cts:text}</strong>)
 };
 
+declare function data:highlight_workaround($uri) {
+(: let $node := fn:doc("content/news/world-asia-china-23081653.xml")//*:title return :)
+  cts:highlight(doc($uri)//*:title, data:matchesAnyQuery($ctsQuery), <strong>{$cts:text}</strong>)
+};
+
+(: Get the metadata to display for a given document :)
+(:
+declare function data:metadata($uri) {
+  meta:data($uri)
+};
+:)
+
+declare function data:tags($uri) {
+  meta:tags($uri, $results)
+};
+
 declare function data:categories($uri) {
+  
   meta:categories($uri, $results)
+};
+
+declare function data:article-link($doc-uri) {
+  doc($doc-uri)/*:html/*:head/@resource
 };

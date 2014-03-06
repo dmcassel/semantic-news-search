@@ -5,6 +5,7 @@
      can be expanded.
 -->
 <facets>
+	
   <facet name="cat"
          display="Article Category"
          index-name="category"

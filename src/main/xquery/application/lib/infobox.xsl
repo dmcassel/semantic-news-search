@@ -51,6 +51,13 @@
         <prop iri="&prop;populationCensus" >Population</prop>
       </list>
     </config>
+    <!--config type="&dbpo;Place">
+      <image iri="&foaf;depiction"/>
+      <list>
+        <prop iri="&prop;name"       >Place</prop>
+        <prop iri="&prop;nickname"   >Nick Name</prop> 
+      </list>
+    </config-->
   </xsl:variable>
 
   <xsl:template match="mt:infobox">

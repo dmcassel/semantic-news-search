@@ -2,9 +2,23 @@
 
 #infobox img { width: 100% }
 
+#infobox dt {
+	line-height: 20px;
+  font-family: Arial;
+  font-weight: bold;
+}
+
+#infobox dd {
+	line-height: 20px;
+  font-family: Arial;
+
+}
+
 #results ul,
 #facets ul {
   list-style-type: none;
+  line-height: 20px;
+  font-family: Arial;
 }
 
 #results li {
@@ -12,6 +26,12 @@
   padding: 10px;
   margin: 0 -8px;
 
+}
+
+.title {
+	line-height: 20px;
+  font-family: Arial;
+  font-weight: bold;
 }
 
 .on a {
@@ -25,6 +45,11 @@
   text-decoration: none;
   */
 }
+
+.categories span {
+  font-weight: bold;
+}
+
 .category_on a {
 	/*color:#fff;*/
   /*
@@ -37,8 +62,69 @@
   cursor: default;
 }
 
-.pagination {
-  position: absolute;
-  bottom: 20px;
-  right: 10px;
+.tags a {
+  /*
+  text-decoration: none;
+  */
+}
+
+.tags span {
+  font-weight: bold;
+}
+
+.tag_on a {
+	/*color:#fff;*/
+  /*
+  font-weight: bold;
+  */
+	text-decoration:none;
+
+  /* For now, disable "turn off this facet" from here; non-intuitive */
+  pointer-events: none;
+  cursor: default;
+}
+
+.header-wrapper {
+    overflow: hidden;
+    border-bottom: 2px solid black;
+    padding-bottom: 10px;
+}
+
+.center {
+	
+	padding-top: 20px; 
+	
+	margin-left: 1%;
+	
+    width: 50%;
+    float: left;
+    /* background: red; */
+   
+   line-height: 20px;
+  font-family: Arial;
+  font-weight: bold;
+  font-size: 40px;
+  color: black;
+   
+}
+.right {
+	
+	padding-top: 22px; 
+	
+    float: right;
+    width: 20%;
+    /*background: green; */
+    margin-right: -3%;
+    
+}
+.left {
+	
+	padding-top: 1px;
+	
+    float: left;
+    width: 25%;
+    margin-left: 7%;
+    /*text-align: right; */
+    /*background: blue;*/
+   
 }

@@ -1,11 +1,3 @@
-<!-- This stylesheet handles the rendering of the .html templates.
-     It replaces tags and attributes in the "mt" namespace
-     with the dynamic data they reference. For example, an element
-     with mt:repeating="result" will get repeated once for each
-     search result, and each element inside it annotated with
-     mt:field="title" will get populated with the title of that
-     particular search result.
--->
 <xsl:stylesheet version="2.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
@@ -31,6 +23,7 @@
 
   <xsl:include href="infobox.xsl"/>
 
+  <xsl:variable name="q" select="xdmp:get-request-field('q','')"/>
 
   <!-- These are lazily evaluated -->
   <xsl:variable name="results" select="data:get('results')"/>
@@ -51,6 +44,15 @@
   <xsl:template match="mt:result-count">
     <xsl:value-of select="$results/@total"/>
   </xsl:template>
+
+  <!-- Pre-select the relevant sort option -->
+<!--
+  <xsl:template match="select[@mt:sortbox eq 'yes']/option/@mt:selected">
+    <xsl:if test="../@value eq $data:current-sort-order">
+      <xsl:attribute name="selected" select="'selected'"/>
+    </xsl:if>
+  </xsl:template>
+-->
 
 
   <!-- Let the next rule copy @class when @mt:selected-class is also present -->
@@ -75,30 +77,6 @@
     <xsl:attribute name="value">
       <xsl:value-of select="$data:q"/> 
     </xsl:attribute>
-  </xsl:template>
-
-  <xsl:template match="mt:pagination">
-    <xsl:for-each select="$results">
-      <form class="pagination" action="/search/" method="get">
-        <div>
-          <xsl:if test="$data:p gt 1">
-            <a class="prev" href="/search/?q={encode-for-uri($data:q)}&amp;p={$data:p - 1}">&#171;</a>
-            <xsl:text> </xsl:text>
-          </xsl:if>
-          <label>
-            <xsl:text>Page </xsl:text>
-            <input name="p" type="text" value="{$data:p}" size="4"/>
-            <input name="q" type="hidden" value="{$data:q}"/>
-            <xsl:text> of </xsl:text>
-            <xsl:value-of select="ceiling(@total div @page-length)"/>
-          </label>
-          <xsl:if test="@total gt (@start + @page-length - 1)">
-            <xsl:text> </xsl:text>
-            <a class="next" href="/search/?q={encode-for-uri($data:q)}&amp;p={$data:p + 1}">&#187;</a>
-          </xsl:if>
-        </div>
-      </form>
-    </xsl:for-each>
   </xsl:template>
 
   <!-- Post-process the facet lists to auto-expand when a descendant value is selected -->
@@ -169,7 +147,12 @@
                     <xsl:param name="facet-name"/>
                     <xsl:sequence select="$results/search:facet[@name eq $facet-name]/search:facet-value"/>
                   </xsl:function>
-
+                  
+                  <!--xsl:function name="my:tag-values">
+                    <xsl:param name="results"/>
+                    <xsl:param name="facet-name"/>
+                    <xsl:sequence select="$results/search:facet[@name eq $facet-name]/search:facet-value"/>
+                  </xsl:function-->
 
   <!-- Render repeating items -->
   <xsl:template match="*[@mt:repeating]" priority="1">
@@ -193,6 +176,8 @@
                              else if ($item-name eq 'facet')          then $data:facet-configs
                              else if ($item-name eq 'facet-value')    then my:facet-values($results, $parent-data/@name)
                              else if ($item-name eq 'category')       then data:categories($parent-data/@uri)
+                             else if ($item-name eq 'tag')       	  then data:tags($parent-data/@uri)
+(:                             else if ($item-name eq 'metadata')     then data:metadata($parent-data/@uri) :)
                              else ()"/>
           </xsl:function>
 
@@ -231,14 +216,22 @@
     <xsl:param name="data" tunnel="yes"/>
     <xsl:value-of select="$data"/>
   </xsl:template>
-
-
+  
+  <xsl:template mode="content" match="*[@mt:repeating eq 'tag']
+                                    //*[@mt:field     eq 'name']">
+    <xsl:param name="data" tunnel="yes"/>
+    <xsl:value-of select="$data"/>
+  </xsl:template>
 
   <!-- Render result fields -->
   <xsl:template mode="content" match="*[@mt:repeating eq 'result']
                                     //*[@mt:field     eq 'title']">
     <xsl:param name="data" tunnel="yes"/>
+    <xsl:value-of select="xdmp:log(concat('$data/@uri: ',string(doc('content/news/world-asia-china-23081653.xml'))(://xhtml:title:)))"/>
+<!--
     <xsl:copy-of select="data:highlight(doc($data/@uri)//xhtml:title)/node()"/>
+   -->
+    <xsl:copy-of select="data:highlight_workaround($data/@uri)/node()"/>
   </xsl:template>
 
   <xsl:template mode="content" match="*[@mt:repeating eq 'result']
@@ -259,6 +252,15 @@
               <xsl:apply-templates mode="#current"/>
             </strong>
           </xsl:template>
+
+
+  <!--
+  <xsl:template match="mt:result-metadata">
+    <xsl:param name="data" tunnel="yes"/>
+    <xsl:value-of select="xdmp:quote($data)"/>
+  </xsl:template>
+  -->
+
 
 
   <!-- Replace attribute templates of the form {mt:var} -->
@@ -289,24 +291,57 @@
               </xsl:when>
               <!-- Article link -->
               <xsl:when test="$var-name eq 'articleLink'">
-                <xsl:value-of select="doc($data/@uri)/*:html/*:head/@resource"/>
+                <!--xsl:value-of select="doc($data/@uri)/*:html/*:head/@resource"/-->
+                
+                <!-- workaround due to invoke xslt bug -->
+                
+                <xsl:value-of select="data:article-link($data/@uri)"/>
               </xsl:when>
             </xsl:choose>
           </xsl:template>
 
 
-          <xsl:template mode="search-q" match="category">
+          <!--xsl:template mode="search-q" match="category">
             <xsl:apply-templates mode="search-q" select="my:facet-values($results, 'cat')[@name eq current()]"/>
-          </xsl:template>
+          </xsl:template-->
+          
+          <!--xsl:template mode="search-q" match="tag">
+            <xsl:apply-templates mode="search-q" select="my:facet-values($results, 'person')[@name eq current()]"/>
+          </xsl:template-->
 
           <xsl:template mode="search-q" match="search:facet-value">
             <xsl:variable name="selected" select="my:is-constraint-selected(.)"/>
             <xsl:variable name="this-constraint" select="my:this-constraint(.)"/>
 
+            <!-- CHANGEME delete this element -->
+            <xsl:variable name="new-q" select="if ($selected) then search:remove-constraint($data:q, $this-constraint, $workaround-options)
+                                                              else concat($data:q,' ', $this-constraint)"/>
+            <!-- CHANGEME un-comment this element
             <xsl:variable name="new-q" select="if ($selected) then search:remove-constraint($data:q, $this-constraint, $data:options)
                                                               else concat($data:q,' ', $this-constraint)"/>
+            -->
             <xsl:value-of select="encode-for-uri($new-q)"/>
           </xsl:template>
+
+
+                  <!-- CHANGEME delete this cluster of elements -->
+                  <xsl:variable name="workaround-options" as="element()">
+                    <xsl:apply-templates mode="workaround-options" select="$data:options"/>
+                  </xsl:variable>
+                          <xsl:template mode="workaround-options" match="search:custom/@facet | search:start-facet | search:finish-facet"/>
+                          <xsl:template mode="workaround-options" match="search:parse/@ns">
+                            <xsl:attribute name="ns" select="'http://marklogic.com/sem-app/workaround'"/>
+                          </xsl:template>
+                          <xsl:template mode="workaround-options" match="search:parse/@at">
+                            <xsl:attribute name="at" select="'/lib/workaround-lib.xqy'"/>
+                          </xsl:template>
+                          <xsl:template mode="workaround-options" match="@* | node()">
+                            <xsl:copy>
+                              <xsl:apply-templates mode="#current" select="@* | node()"/>
+                            </xsl:copy>
+                          </xsl:template>
+
+
 
                   <xsl:function name="my:this-constraint" as="xs:string">
                     <xsl:param name="fv" as="element(search:facet-value)"/>
@@ -333,6 +368,25 @@
                                                               $c//@qtextpost),'')"/>
                     <xsl:sequence select="$constraints"/>
                   </xsl:function>
+
+                  <!-- Remove constraints recursively, in case someone tries to enter two constraints -->
+                  <xsl:function name="my:remove-constraints" as="xs:string">
+                    <xsl:param name="q" as="xs:string"/>
+                    <xsl:param name="constraints" as="xs:string*"/>
+                    <xsl:param name="options" as="element(search:options)"/>
+<xsl:value-of select="xdmp:log(concat('removing: ',$constraints))"/>
+                    <xsl:choose>
+                      <xsl:when test="not($constraints)">
+                        <xsl:sequence select="$q"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:variable name="new-q" select="search:remove-constraint($q, $constraints[1], $options)"/>
+                        <xsl:sequence select="if (count($constraints) gt 1) then my:remove-constraints($new-q,$constraints[position() gt 1],$options)
+                                                                            else $new-q"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:function>
+
 
 
   <!-- Boilerplate, default copy behavior -->
