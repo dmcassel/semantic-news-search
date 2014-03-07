@@ -36,8 +36,17 @@
   font-weight: bold;
   font-size: 15px;
 }
+.on a:after {
+    content: url('../images/boxed-close.png');
+}
 li.on {
     margin-left: -4px;
+}
+.facet-close {
+  display: none;
+}
+.on .face-close {
+  display: inline;
 }
 .categories a {
 }
@@ -55,11 +64,15 @@ li.on {
   overflow: visible;
 }
 .center {
-  color: #222222;
-  float: left;
+ float: left;
   font-family: "Lucida Bright", Georgia, serif;
-  font-size: 40px;
-  font-weight: bold;
+  font-size: 40px;  color: #222222;
+ 
+ 
+ ul li:after {
+    content: url('../images/small_triangle.png');
+} fo
+  nt-weight: bold;
   line-height: 20px;
   margin-left: 1%;
   padding-top: 28px;
