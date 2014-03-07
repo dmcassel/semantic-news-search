@@ -57,7 +57,7 @@ img {
 	padding:.4em 15px 0 15px;
 	margin:0;
 }
-#header ul {
+/*#header ul {
 	clear:left;
 	float:left;
 	width:100%;
@@ -96,7 +96,7 @@ img {
 }
 #header ul li a span {
 	display:block;
-}
+}*/
 /* 'widths' sub menu */
 #layoutdims {
 	clear:both;
