@@ -33,10 +33,11 @@
   line-height: 15px;
 }
 .on a {
-  background: none repeat scroll 0 0 #336699;
-  color: #FFFFFF;
-  padding: 0 4px;
-  text-decoration: none;
+  font-weight: bold;
+  font-size: 15px;
+}
+li.on {
+    margin-left: -4px;
 }
 .categories a {
 }
