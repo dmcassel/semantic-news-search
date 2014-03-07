@@ -12,11 +12,11 @@ body {
 }
 a {
 	color:#369;
+  text-decoration: none;
 }
 a:hover {
-  color:#fff;
-  background:#369;
-  text-decoration:none;
+  color:#369;
+  text-decoration:underline;
 }
 /*hover for the text links*/
 #results a:hover ul, #facets ul a:hover {
