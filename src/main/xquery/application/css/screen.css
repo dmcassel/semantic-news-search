@@ -1,12 +1,12 @@
 /* Downloaded from here: http://matthewjamestaylor.com/blog/perfect-3-column.htm
  */
 body {
-	margin:0;
-	padding:0;
-	border:0;			/* This removes the border around the viewport in old versions of IE */
-	width:100%;
-	background:#fff;
-	min-width:600px;		/* Minimum width of layout - remove line if not required */
+  margin:0;
+  padding:0;
+  border:0;			/* This removes the border around the viewport in old versions of IE */
+  width:100%;
+  background:#fff;
+  min-width:600px;		/* Minimum width of layout - remove line if not required */
   font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
   font-size:90%;
 }
@@ -144,7 +144,7 @@ img {
 	background:#eee;		/* right column background colour */
 }
 .threecol .colmid {
-	right:20%;			/* width of the right column */
+	right:25%;			/* width of the right column */
 	background:#fff;		/* center column background colour */
 }
 .threecol .colleft {
